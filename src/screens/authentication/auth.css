@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+.auth{
+    display: flex;
+    flex-direction: column;
+    height:100vh;
+    overflow-x:hidden;
+    width: 100%;
+   padding: 20px;
+   justify-content: space-evenly;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    z-index:3;
+}
+
+.auth::-webkit-scrollbar{
+    width:5px;
+}
+
+  .auth::-webkit-scrollbar-thumb {
+    background-color: var(--lightGreenBackground);
+    outline: 1px solid var(--lightGreenBackground);
+  }
+
+.w__logo{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    width:100%;
+    height:auto;
+    max-width:400px;
+    z-index:2;
+    margin-top:-20px;
+}
+
+.name{
+    padding: 10px 15px;
+    background-color: #23b180;
+    text-decoration: none;
+    color:white;
+    margin-left: 10px;
+}
+
+.center{
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+
+.usrcount__icon{
+   margin-right: 5px;   
+}
+
+.font__large{
+    display: flex;
+    align-items: center;
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-weight: 500;
+    font-size: 20px;
+    z-index:2;
+    background-color: #23b17f8e;
+    color:white;
+    padding: 10px;
+    border-radius: 5px;
+
+}
+
+.center_align{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.text_white{
+    color:white;
+}
+.wave{
+    position:fixed;
+    bottom:0;
+    height:100vh;
+    animation:move 250s linear infinite alternate;
+    left:0;
+    width:5000px;
+    background-image: url('https://res.cloudinary.com/dpjkblzgf/image/upload/v1623686063/bg_qqbvns.png');
+    background-repeat: repeat;
+}
+
+   
+   @media (max-width:1919px) {
+    .div {
+      background-size: contain;
+    }
+   }
+   
+
+.join__btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+     padding: 10px 35px;
+    cursor: pointer;
+    background-color: #23b17f8e;
+    color:#fff;
+    border:none;
+    outline:none;
+    border-radius: 70px;
+    font-size: 21px;
+    transition:0.3s;
+    font-family: 'Montserrat', sans-serif;
+
+}
+.join__btn:hover{
+    background-color: #1a7454;
+}
+
+.btn__container{
+    padding:20px;
+    z-index:2;
+    transition:0.4s all ease-out;
+}
+.btn__container:hover{
+    transform:translateY(-5px);
+}
+
+.google__logo{
+    height: 30px;
+    width: auto;
+    margin-left: 10px;
+    border-radius: 50%;
+}
+
+.preloader{
+    height: 80px;
+    width: auto;
+    z-index: 2;
+}
+
+@keyframes move {
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-2500px);
+    }
+}

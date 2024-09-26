@@ -1,0 +1,96 @@
+:root {
+  --darkFontSHColor: rgb(153, 151, 151);
+  --darkGreenBackground: #343836;
+  --darkFontColor: #fff;
+  --darkBackground: rgb(27, 39, 39);
+  --darkChatBG: rgba(27, 26, 26, 0.89);
+
+  --lightChatBG: #fee4c3cc;
+  --lightFontSHColor: rgb(153, 151, 151);
+  --lightFontColor: rgb(43, 42, 42);
+  --lightGreenBackground: #3fdbb7;
+  --lightBackground: rgb(238, 231, 231);
+}
+
+.Toastify__progress-bar--dark {
+  background: #00bfa5 !important;
+}
+
+.Toastify__progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  z-index: 9999;
+  opacity: 0.7;
+  background-color: #00bfa5 !important;
+  transform-origin: left;
+}
+
+.theme__font {
+  color: var(--darkFontColor);
+}
+
+.theme__h2 {
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.theme__h4 {
+  font-size: 17px;
+  font-weight: 500;
+}
+.theme__h5 {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.theme__h3 {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--lightGreenBackground);
+}
+
+.theme__search {
+  background-color: rgba(97, 89, 89, 0.541);
+}
+
+.theme__subfont {
+  color: var(--darkFontSHColor);
+}
+
+.theme__bg {
+  background-color: var(--darkBackground);
+}
+.theme__input__bg {
+  background-color: var(--darkInputBackground);
+}
+
+.theme__green__bg {
+  background-color: var(--darkGreenBackground);
+}
+
+.hover {
+  background-color: rgba(160, 154, 154, 0.801);
+}
+
+.screen {
+  display: flex;
+  width: 100%;
+}
+.app__left {
+  flex: 0.3;
+}
+.app__right {
+  flex: 0.7;
+}
+
+.app__full {
+  flex: 1;
+}
+
+.app__none {
+  flex: 0;
+  display: none;
+}
