@@ -17,8 +17,13 @@ const userAuthSlice = createSlice({
     setLoading(state, action) {
       state.isLoading = action.payload;
     },
+
+    logOut (state) {
+      state.currentUser = null;
+      state.isLoading = false;
+    }
   },
 });
 
-export const {setCurrentUser, setLoading} = userAuthSlice.actions;
+export const {setCurrentUser, setLoading, logOut} = userAuthSlice.actions;
 export default userAuthSlice.reducer;
