@@ -40,7 +40,7 @@ const UserProfile = ({ change }) => {
 
   const uploadImage = async (files) => {
     if (files[0] && files[0].type.includes("image")) {
-      if (files[0].size < 4100000) {
+      if (files[0].size < 5,242,900) {
         toast.dark("Uploading image", {
           position: "bottom-left",
           autoClose: 4300,
@@ -58,7 +58,7 @@ const UserProfile = ({ change }) => {
           });
         }
       } else {
-        toast.error("Keep image size below 4MB", {
+        toast.error("Keep image size below 5MB", {
           position: "bottom-left",
           autoClose: 2000,
         });

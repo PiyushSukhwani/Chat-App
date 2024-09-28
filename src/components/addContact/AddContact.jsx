@@ -103,8 +103,6 @@ const AddContact = ({ change }) => {
           const userDet = await getDoc(userDocRef);
           if (userDet.exists()) {
             setUser5(userDet.data());
-          } else {
-            console.error("No such document!");
           }
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -125,7 +123,6 @@ const AddContact = ({ change }) => {
           data: doc.data(),
         }));
         setUsers(usersData);
-        console.log(usersData);
       });
       return () => unsubscribeUsers();
     }
