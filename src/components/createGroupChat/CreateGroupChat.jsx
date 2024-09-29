@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./CreateGroupChat.css";
-import { v4 as uuid } from "uuid";
+import "./createGroupChat.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthContext } from "../../App";
 import {
   doc,
   getDoc,
@@ -11,6 +9,7 @@ import {
   query,
   where,
   onSnapshot,
+  setDoc,
 } from "firebase/firestore";
 import {
   ArrowBack,
@@ -24,11 +23,11 @@ import UserItem from "../useritem/UserItem";
 import { useSelector } from "react-redux";
 import { db } from "../../firebase/firebase";
 import upload from "../../firebase/upload";
+import { v4 as uuid } from "uuid";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function CreateGroupChat({ change }) {
-
   const [searchName, setSearchName] = useState("");
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
@@ -90,7 +89,7 @@ function CreateGroupChat({ change }) {
     }
   }, [currentUser]);
 
-  const createGroupHandler = () => {
+  const createGroupHandler = async () => {
     if (!groupName.trim().length) {
       toast.error("Enter Group Name", {
         position: "top-left",
@@ -108,52 +107,56 @@ function CreateGroupChat({ change }) {
     }
 
     const chatId = uuid();
-    db.collection("chats")
-      .doc(chatId)
-      .set(
-        {
-          chatid: chatId,
-          chatname: groupName.trim(),
-          description: description.trim(),
-          dp: groupImage,
-          lastTexted: `${new Date()}`,
-          members: [...addedContactsUid, user2.uid],
-          membersMail: [...addedContactsMail, user2.umail],
-          messages: [
-            {
-              content: `${umailExtractor(
-                user2.umail
-              )} created this group with ${addedContactsUid.length} other(s)`,
-              type: "info",
-              timePosted: `${new Date()}`,
-              mid: uuid(),
-            },
-          ],
-          timestamp: new Date(),
-          type: "group",
-        },
-        { merge: true }
-      );
 
-    change("chatlist");
+    try {
+      await setDoc(doc(db, "chats", chatId), {
+        chatid: chatId,
+        chatname: groupName.trim(),
+        description: description.trim(),
+        dp: groupImage,
+        lastTexted: new Date(),
+        members: [...addedContactsUid, currentUser],
+        membersMail: [...addedContactsMail, user2.umail],
+        messages: [
+          {
+            content: `${umailExtractor(user2.umail)} created this group with ${
+              addedContactsUid.length
+            } other(s)`,
+            type: "info",
+            timePosted: new Date(),
+            mid: uuid(),
+          },
+        ],
+        timestamp: new Date(),
+        type: "group",
+      });
+
+      // change("chatlist");
+    } catch (error) {
+      console.error("Error creating group: ", error);
+      toast.error("Failed to create group. Please try again.", {
+        position: "top-left",
+        autoClose: 2000,
+      });
+    }
   };
 
   const uploadImage = async (files) => {
     if (files[0] && files[0].type.includes("image")) {
-      if (files[0].size < 10,486,100) {
+      if ((files[0].size < 10, 486, 100)) {
         toast.dark("Uploading image", {
           position: "bottom-left",
           autoClose: 4300,
         });
 
         try {
-            const imgUrl = await upload(files[0])
-            setGroupImage(imgUrl);
+          const imgUrl = await upload(files[0]);
+          setGroupImage(imgUrl);
         } catch (error) {
-            toast.error("Error uploading image", {
-                position: "bottom-left",
-                autoClose: 2000,
-            })
+          toast.error("Error uploading image", {
+            position: "bottom-left",
+            autoClose: 2000,
+          });
         }
       } else {
         toast.error("Keep image size below 10Mb", {
