@@ -18,13 +18,15 @@ import { useSelector } from "react-redux";
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function ArchievedList({ change }) {
-//   const resetRightScreenChat = useContext(ResetRightScreen);
+  //   const resetRightScreenChat = useContext(ResetRightScreen);
   const [selectedChat, setSelectedChat] = useState("0");
   const [searchName, setSearchName] = useState("");
   const [chats, setChats] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
-  const [user, setUser] = useState({ dp: "" });
-  const currentUser = useSelector(state => state.userAuth.currentUser)
+  const [user, setUser] = useState({
+     dp: ""
+  });
+  const currentUser = useSelector((state) => state.userAuth.currentUser);
 
   const changeSelectedChat = (chat) => {
     setSelectedChat(chat);
@@ -55,7 +57,6 @@ function ArchievedList({ change }) {
 
   useEffect(() => {
     // resetRightScreenChat();
-
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser);
 
@@ -71,10 +72,14 @@ function ArchievedList({ change }) {
       };
 
       fetchUserData();
+    }
+  }, [currentUser]);
 
+  useEffect(() => {
+    if (user.archived && user.archived.length > 0) {
       const chatsQuery = query(
         collection(db, "chats"),
-        where("chatid", "in", user.archieved),
+        where("chatid", "in", user.archived),
         where("members", "array-contains", currentUser),
         orderBy("timestamp", "desc")
       );
@@ -89,7 +94,7 @@ function ArchievedList({ change }) {
 
       return () => unsubscribeChats();
     }
-  }, [currentUser]);
+  }, [user, currentUser]);
 
   return (
     <div className="chat__list theme__bg theme__font">
