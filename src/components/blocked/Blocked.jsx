@@ -71,7 +71,11 @@ function BlockedList({ change }) {
       };
 
       fetchUserData();
+    }
+  }, [currentUser]);
 
+  useEffect(() => {
+    if (user.blocked && user.blocked.length > 0) {
       const chatsQuery = query(
         collection(db, "chats"),
         where("chatid", "in", user.blocked),
@@ -89,7 +93,7 @@ function BlockedList({ change }) {
 
       return () => unsubscribeChats();
     }
-  }, [currentUser]);
+  }, [user, currentUser]);
 
   return (
     <div className="chat__list theme__bg theme__font">
