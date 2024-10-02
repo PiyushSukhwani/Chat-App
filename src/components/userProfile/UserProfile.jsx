@@ -92,7 +92,7 @@ const UserProfile = ({ change }) => {
   return (
     <div className="user__profile theme__bg theme__font">
       <div className="profile__header sticky__top theme__green__bg">
-        <span onClick={() => change("chatlist")}>
+        <span onClick={() => change("chatList")}>
           <ArrowBack className="profile__back" />
         </span>
         <h2 className="theme__h2">Profile</h2>

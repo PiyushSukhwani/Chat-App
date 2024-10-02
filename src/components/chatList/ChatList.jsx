@@ -131,7 +131,7 @@ function ChatList({ change }) {
       <div className="sticky__top theme__bg">
         <div className="chatlist__header theme__green__bg archieved__header">
           <img
-            onClick={() => change("userprofile")}
+            onClick={() => change("userProfile")}
             className="user__img"
             src={user0.dp}
             alt=""
@@ -153,13 +153,13 @@ function ChatList({ change }) {
                     style={{ border: "1px solid grey" }}
                   >
                     <div
-                      onClick={() => change("createuserchat")}
+                      onClick={() => change("createUserChat")}
                       className="menu__option__item"
                     >
                       Add new contact
                     </div>
                     <div
-                      onClick={() => change("creategroupchat")}
+                      onClick={() => change("createGroupChat")}
                       className="menu__option__item"
                     >
                       Create group
@@ -181,7 +181,7 @@ function ChatList({ change }) {
                     style={{ border: "1px solid grey" }}
                   >
                     <div
-                      onClick={() => change("userprofile")}
+                      onClick={() => change("userProfile")}
                       className="menu__option__item"
                     >
                       User Profile

@@ -100,7 +100,7 @@ function BlockedList({ change }) {
       <div className="sticky__top theme__bg">
         <div className="chatlist__header theme__green__bg">
           <h2 className="theme__h2 blocked__header">
-            <span onClick={() => change("chatlist")}>
+            <span onClick={() => change("chatList")}>
               <ArrowBack className="arch__back__icon" />
             </span>
             Blocked chats

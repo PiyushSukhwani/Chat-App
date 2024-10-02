@@ -39,7 +39,7 @@ function CreateGroupChat({ change }) {
   const [groupImage, setGroupImage] = useState(
     "https://res.cloudinary.com/dpjkblzgf/image/upload/v1623514492/Frame_2_rsaqpn.png"
   );
-  const [user2, setUser2] = useState({});
+  const [user2, setUser2] = useState(null);
   const currentUser = useSelector((state) => state.userAuth.currentUser);
 
   const filterFun = (searchInp) => {
@@ -57,7 +57,8 @@ function CreateGroupChat({ change }) {
   };
 
   useEffect(() => {
-    if (currentUser) {
+    if (!currentUser) { return }
+
       const userDocRef = doc(db, "users", currentUser);
 
       const fetchUserData = async () => {
@@ -85,8 +86,8 @@ function CreateGroupChat({ change }) {
         }));
         setUsers(usersData);
       });
+      
       return () => unsubscribeUsers();
-    }
   }, [currentUser]);
 
   const createGroupHandler = async () => {
@@ -177,7 +178,7 @@ function CreateGroupChat({ change }) {
   return (
     <div className="user__profile theme__bg theme__font">
       <div className="profile__header sticky__top theme__green__bg">
-        <span onClick={() => change("chatlist")}>
+        <span onClick={() => change("chatList")}>
           <ArrowBack className="profile__back" />
         </span>
         <h2 className="theme__h2">Create Group</h2>
