@@ -92,33 +92,37 @@ function ChatList({ change }) {
     //   resetRightScreenChat();
 
       if (currentUser) {
-        const userRef = doc(db, "users", currentUser);
-        const userDoc = await getDoc(userRef);
-
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setUser0(userData);
-
-          const q = query(
-            collection(db, "chats"),
-            where("members", "array-contains", currentUser),
-            orderBy("timestamp", "desc")
-          );
-
-          const unsubscribeChats = onSnapshot(q, (snapshot) => {
-            setChats(
-              snapshot.docs.map((doc) => ({
-                id: doc.id,
-                data: doc.data(),
-                userid: currentUser,
-                usermail: userData.umail,
-                userArchieved: userData.archieved,
-                userBlocked: userData.blocked,
-              }))
+        try {
+          const userRef = doc(db, "users", currentUser);
+          const userDoc = await getDoc(userRef);
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setUser0(userData);
+            
+            const q = query(
+              collection(db, "chats"),
+              where('members', "array-contains", currentUser),
+              orderBy("timestamp", "desc")
             );
-          });
-
-          return () => unsubscribeChats();
+            
+            const unsubscribeChats = onSnapshot(q, (snapshot) => {
+              setChats(
+                snapshot.docs.map((doc) => ({
+                  id: doc.id,
+                  data: doc.data(),
+                  userid: currentUser,
+                  usermail: userData.umail,
+                  userArchieved: userData.archived,
+                  userBlocked: userData.blocked,
+                }))
+              );
+            });
+            
+            return () => unsubscribeChats();
+          }
+        } catch (error) {
+          console.log(error);
         }
       }
     };
