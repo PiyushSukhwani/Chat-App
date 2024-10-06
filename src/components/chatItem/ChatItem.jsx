@@ -8,7 +8,7 @@ import Popup from "reactjs-popup";
 import { db } from "../../firebase/firebase";
 import { Archive, Block, ExpandMore, Group } from "@mui/icons-material";
 import { ClickAwayListener } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   arrayRemove,
   arrayUnion,
@@ -19,6 +19,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
+import { resetRightScreenChat, updateRightScreenChat } from "../../store/chatSlice";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
@@ -48,6 +49,7 @@ function ChatItem({
   });
   const [options, setOptions] = useState(false);
   const [display, setDisplay] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -71,12 +73,11 @@ function ChatItem({
     };
 
     fetchUserData();
-    // }, [type, currentUser, members]);
   }, [currentUser]);
 
   const exitGroup = async () => {
     setDisplay(false);
-    // if (selectedChat === chatid) resetRightScreenChat();
+    if (selectedChat === chatid) dispatch(resetRightScreenChat())
     setTimeout(async () => {
       const chatRef = doc(db, "chats", chatid);
 
@@ -141,7 +142,7 @@ function ChatItem({
         });
 
         if (chatid === selectedChat) {
-          // resetRightScreenChat();
+          dispatch(resetRightScreenChat())
         }
       }
     } catch (error) {
@@ -172,7 +173,7 @@ function ChatItem({
           ? members[1]
           : members[0]
         : chatid;
-    // updateRightScreenChat(targetUser, type, chatid, e.target);
+        dispatch(updateRightScreenChat([targetUser, type, chatid, e.target]))
     // updateMobileView(false);
   };
 
@@ -201,9 +202,9 @@ function ChatItem({
                 if (type === "personal") {
                   const otherMember =
                     uid === members[0] ? members[1] : members[0];
-                  // updateRightScreenChat(otherMember, type, chatid, e.target);
+                    dispatch(updateRightScreenChat([otherMember, type, chatid, e.target]))
                 } else {
-                  // updateRightScreenChat(chatid, type, 0, e.target);
+                  dispatch(updateRightScreenChat([chatid, type, 0, e.target]));
                 }
                 // updateMobileView(false);
               }
