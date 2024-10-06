@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.25.7",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.1",
@@ -17,14 +18,18 @@
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
+    "emoji-picker-element": "^1.22.8",
     "firebase": "^10.13.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-model": "^4.3.1",
     "react-redux": "^9.1.2",
+    "react-speech-recognition": "^3.10.0",
     "react-toastify": "^10.0.5",
+    "react-uuid": "^2.0.0",
     "reactjs-popup": "^2.0.6",
     "redux": "^5.0.1",
+    "regenerator-runtime": "^0.14.1",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
