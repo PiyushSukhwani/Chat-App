@@ -9,11 +9,11 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PermIdentity } from "@mui/icons-material";
 
-const Auth = ({isLoading, updateLoader}) => {
+const Auth = ({isLoading, updateLoader, updateAuth}) => {
   const [userCount, setUserCount] = useState([]);
   const dispatch = useDispatch();
 
-  const { currentUser, isLoading } = useSelector((state) => state.userAuth);
+  // const { currentUser, isLoading } = useSelector((state) => state.userAuth);
 
   const signIn = async () => {
     const provider = new GoogleAuthProvider();
@@ -23,6 +23,7 @@ const Auth = ({isLoading, updateLoader}) => {
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
+        updateAuth(true)
         dispatch(setCurrentUser(user.uid));
       } else {
         // dispatch(setLoading(true));
@@ -48,6 +49,7 @@ const Auth = ({isLoading, updateLoader}) => {
           },
           { merge: true }
         );
+        updateAuth(true)
         updateLoader(false);
         // dispatch(setCurrentUser(user.uid));
       }
