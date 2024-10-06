@@ -2,11 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import "./chatHeader.css";
 import { ArrowBack } from "@mui/icons-material";
 import { db } from "../../firebase/firebase";
+import { doc, getDoc } from "firebase/firestore";
 // import { UpdateMobileView } from '../../App';
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function ChatHeader({ rightScreenChat, updateChatDetailsVisibility }) {
+  
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [chatHeader, setChatHeader] = useState({
     dp: "https://res.cloudinary.com/dpjkblzgf/image/upload/v1624507908/mess_zq9mov.png",
