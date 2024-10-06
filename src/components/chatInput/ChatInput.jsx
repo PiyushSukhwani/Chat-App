@@ -15,6 +15,7 @@ import {
 } from "@mui/icons-material";
 import { db } from "../../firebase/firebase";
 import { arrayUnion, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import upload from "../../firebase/upload";
 // import { CLOUD_NAME, UPLOAD_PRESET } from "../../cloudinary";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
@@ -95,16 +96,8 @@ function ChatInput({ rightScreenChat, user, updateScrollTimeout }) {
           autoClose: 4300,
         });
 
-        const formData = new FormData();
-        formData.append("file", files[0]);
-        formData.append("upload_preset", UPLOAD_PRESET);
-
-        Axios.post(
-          `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
-          formData
-        )
-          .then((response) => setImageInput(response.data.secure_url))
-          .catch(() => toast.error("Image upload failed"));
+        const imgUrl = upload(files[0])
+        setImageInput(imgUrl)
       } else {
         toast.error("Keep image size below 4Mb", {
           position: "bottom-left",
