@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./chatInput.css";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
-// import Axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
-import { v4 as uuid } from "react-uuid";
+// import { uuid } from "react-uuid";
+import { v4 as uuid } from 'uuid';
 import "emoji-picker-element";
 import {
   DeleteForever,
@@ -16,7 +16,6 @@ import {
 import { db } from "../../firebase/firebase";
 import { arrayUnion, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import upload from "../../firebase/upload";
-// import { CLOUD_NAME, UPLOAD_PRESET } from "../../cloudinary";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
@@ -35,6 +34,7 @@ function ChatInput({ rightScreenChat, user, updateScrollTimeout }) {
 
   const handleSendText = async () => {
     const messageContent = textInput.trim();
+    
     if (!listening && (messageContent.length > 0 || imgInput.length > 0)) {
       const chatData = {
         mid: uuid(),
