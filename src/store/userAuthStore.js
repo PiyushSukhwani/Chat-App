@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  currentUser: 'i37CICtnhPcVhXaMUibPRwLmmYn2',
+  currentUser: "",
+  isLoggedIn: false,
   isLoading: true,
 };
 
@@ -21,6 +22,7 @@ const userAuthSlice = createSlice({
     logOut (state) {
       state.currentUser = null;
       state.isLoading = false;
+      state.isLoggedIn = false;
     }
   },
 });
