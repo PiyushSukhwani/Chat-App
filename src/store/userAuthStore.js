@@ -12,7 +12,6 @@ const userAuthSlice = createSlice({
   reducers: {
     setCurrentUser(state, action) {
       state.currentUser = action.payload;
-      console.log(state.currentUser, state.isLoading);
     },
 
     setLoading(state, action) {
