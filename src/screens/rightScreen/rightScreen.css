@@ -1,0 +1,111 @@
+/* .ppp{
+    resize:none;
+    font-family: sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+
+
+}
+.ppp::-webkit-scrollbar{
+    display: none !important;
+}
+
+.ppp::-webkit-scrollbar-thumb{
+    display:none !important;
+   
+} */
+
+.center_content {
+  position: relative;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.img__right {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: contain;
+  max-width: 500px;
+  height: 100%;
+  width: 100%;
+}
+
+.choose__chat {
+  padding-bottom: 50px;
+  text-align: center;
+  font-size: 21px;
+  font-weight: 300;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.nc__selected {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.theme__dark {
+  background: grey;
+}
+
+.overlay {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--darkChatBG);
+  /* background-color: rgba(27, 26, 26, 0.89); */
+  z-index: 2;
+}
+
+.overlay_cmp {
+  position: fixed;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: rgba(94, 88, 88, 0.671);
+  background-color: var(--darkBackground);
+  z-index: 2;
+}
+
+.right__screen {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  border-left: 1px solid rgb(110, 110, 110);
+  background-image: url("https://theabbie.github.io/blog/assets/official-whatsapp-background-image.jpg");
+}
+
+.chat__messages__content {
+  z-index: 3;
+  overflow-y: auto;
+}
+
+.chat__header__wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.chat__input__wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+}
+
+.chat__messages__content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.chat__messages__content::-webkit-scrollbar-thumb {
+  background-color: var(--lightGreenBackground);
+  outline: 1px solid var(--lightGreenBackground);
+}
