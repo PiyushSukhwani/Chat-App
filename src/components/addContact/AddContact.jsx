@@ -51,7 +51,7 @@ const AddContact = ({ change }) => {
       await setDoc(
         targetUserDocRef,
         {
-          friends: arrayUnion(user5.uid),
+          friends: arrayUnion(currentUser),
         },
         { merge: true }
       );
