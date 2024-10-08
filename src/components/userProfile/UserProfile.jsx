@@ -30,10 +30,8 @@ const UserProfile = ({ change }) => {
           setUser(userDoc.data());
           setUsername(userDoc.data().uname);
           setStatus(userDoc.data().status);
-          console.log(currentUser);
         }
       }
-      console.log(currentUser);
     }
     fetchUserData();
   }, [currentUser]);
