@@ -1,8 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./chatItem.css";
-// import uuid from "react-uuid";
-import { format, isToday, isThisWeek, isYesterday } from "date-fns";
-// import { UpdateRightScreen, UpdateMobileView } from "../../App";
 import { ToastContainer, toast } from "react-toastify";
 import Popup from "reactjs-popup";
 import { db } from "../../firebase/firebase";
@@ -19,7 +16,20 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { v4 as uuid } from "uuid";
-import { resetRightScreenChat, updateRightScreenChat } from "../../store/chatSlice";
+import {
+  resetRightScreenChat,
+  updateRightScreenChat,
+} from "../../store/chatSlice";
+import dayjs from "dayjs";
+import isToday from "dayjs/plugin/isToday";
+import isYesterday from "dayjs/plugin/isYesterday";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(isToday);
+dayjs.extend(isYesterday);
+dayjs.extend(isSameOrAfter);
+dayjs.extend(customParseFormat);
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
@@ -38,8 +48,6 @@ function ChatItem({
   archieved = false,
   blocked = false,
 }) {
-  //   const updateRightScreenChat = useContext(UpdateRightScreen);
-  //   const updateMobileView = useContext(UpdateMobileView);
   const currentUser = useSelector((state) => state.userAuth.currentUser);
   const [user1, setUser1] = useState({
     dp: "",
@@ -62,7 +70,8 @@ function ChatItem({
           const usr = await getDoc(userRef);
 
           if (usr.exists()) {
-            setUser1(usr.data());
+            const data = usr.data();
+            setUser1(data);
           } else {
             toast.error("User not found.");
           }
@@ -77,7 +86,7 @@ function ChatItem({
 
   const exitGroup = async () => {
     setDisplay(false);
-    if (selectedChat === chatid) dispatch(resetRightScreenChat())
+    if (selectedChat === chatid) dispatch(resetRightScreenChat());
     setTimeout(async () => {
       const chatRef = doc(db, "chats", chatid);
 
@@ -128,7 +137,6 @@ function ChatItem({
 
   const blockItemHandler = async () => {
     const userRef = doc(db, "users", uid);
-
     setDisplay(false);
 
     try {
@@ -142,7 +150,7 @@ function ChatItem({
         });
 
         if (chatid === selectedChat) {
-          dispatch(resetRightScreenChat())
+          dispatch(resetRightScreenChat());
         }
       }
     } catch (error) {
@@ -151,12 +159,32 @@ function ChatItem({
   };
 
   const getLastTextTime = (timestamp) => {
-    const date = new Date(timestamp);
-    if (isToday(date)) return format(date, "hh:mm aaa");
-    if (isYesterday(date)) return "yesterday";
-    if (isThisWeek(date)) return format(date, "eeee");
-    return format(date, "dd/MM/yyyy");
+    let date;
+  
+    if (timestamp && typeof timestamp === 'object' && 'seconds' in timestamp) {
+      const milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000;
+      date = dayjs(milliseconds);
+    }
+    else if (typeof timestamp === 'string') {
+      date = dayjs(timestamp);
+    }
+    else {
+      console.error("Invalid timestamp format:", timestamp);
+      return "Invalid Date";
+    }
+  
+    if (!date.isValid()) {
+      console.error("Invalid date created from timestamp:", timestamp);
+      return "Invalid Date";
+    }
+  
+    if (date.isToday()) return date.format("hh:mm a");
+    if (date.isYesterday()) return "yesterday";
+    if (date.isSameOrAfter(dayjs().subtract(7, 'day'))) return date.format("dddd");
+    return date.format("DD/MM/YYYY");
   };
+  
+  
 
   const handleChatClick = (e) => {
     if (blocked) {
@@ -167,14 +195,14 @@ function ChatItem({
       return;
     }
     changeSelectedChat(chatid);
+    
     const targetUser =
       type === "personal"
         ? currentUser === members[0]
           ? members[1]
           : members[0]
         : chatid;
-        dispatch(updateRightScreenChat([targetUser, type, chatid, e.target]))
-    // updateMobileView(false);
+    dispatch(updateRightScreenChat([targetUser, type, chatid, e.target]));
   };
 
   const toggleOptions = () => setOptions((prev) => !prev);
@@ -199,13 +227,13 @@ function ChatItem({
               }
             : (e) => {
                 changeSelectedChat(chatid);
-                if (type === "personal") {
-                  const otherMember =
-                    uid === members[0] ? members[1] : members[0];
-                    dispatch(updateRightScreenChat([otherMember, type, chatid, e.target]))
-                } else {
-                  dispatch(updateRightScreenChat([chatid, type, 0, e.target]));
-                }
+                const targetUser =
+                  type === "personal"
+                    ? uid === members[0]
+                      ? members[1]
+                      : members[0]
+                    : chatid;
+                dispatch(updateRightScreenChat([targetUser, type, chatid, e.target.id]));
                 // updateMobileView(false);
               }
         }
@@ -231,12 +259,13 @@ function ChatItem({
               zIndex: "2",
               backgroundColor: "transparent",
               border: "none",
+              outline: "none",
               width: "fit-content",
             }}
           >
             <Popup
               trigger={
-                <img className="chat__dp" src={user1.dp} alt="Profile" />
+                <img className="chat__dp" src={user1.dp} alt="User Profile" />
               }
               modal
             >
@@ -244,12 +273,13 @@ function ChatItem({
                 <img
                   className="full__img"
                   src={user1.dp}
-                  alt="Full"
+                  alt="Full View"
                   onClick={close}
                 />
               )}
             </Popup>
           </button>
+
           <div className="chat__details">
             <h2
               style={{ display: "inline-flex", marginRight: "5px" }}
@@ -267,6 +297,7 @@ function ChatItem({
               {user1.status}
             </h4>
           </div>
+
           <div className="chat__item__options">
             <div className="time theme__subfont">
               {getLastTextTime(lastTexted)}
@@ -282,11 +313,13 @@ function ChatItem({
                   <Block className="block__icon" />
                 </span>
               )}
+
               <ClickAwayListener onClickAway={() => setOptions(false)}>
                 <span onClick={() => setOptions(!options)}>
                   <ExpandMore className="expand__icon" />
                 </span>
               </ClickAwayListener>
+
               {options && (
                 <div
                   style={{ position: "absolute", border: "1px solid grey" }}
@@ -320,25 +353,27 @@ function ChatItem({
               zIndex: "2",
               backgroundColor: "transparent",
               border: "none",
+              outline: "none",
               width: "fit-content",
             }}
           >
             <Popup
               trigger={
-                <img className="chat__dp" src={user1.dp} alt="Profile" />
+                <img className="chat__dp" src={dp} alt="Group Profile" />
               }
               modal
             >
               {(close) => (
                 <img
                   className="full__img"
-                  src={user1.dp}
-                  alt="Full"
+                  src={dp}
+                  alt="Full View"
                   onClick={close}
                 />
               )}
             </Popup>
           </button>
+
           <div className="chat__details">
             <div style={{ display: "flex", alignItems: "center" }}>
               <h2 style={{ marginRight: "10px" }} className="theme__h4">
@@ -360,6 +395,7 @@ function ChatItem({
               {description}
             </h4>
           </div>
+
           <div className="chat__item__options">
             <div className="time theme__subfont">
               {getLastTextTime(lastTexted)}
@@ -375,11 +411,13 @@ function ChatItem({
                   <Block className="block__icon" />
                 </span>
               )}
+
               <ClickAwayListener onClickAway={() => setOptions(false)}>
                 <span onClick={() => setOptions(!options)}>
                   <ExpandMore className="expand__icon" />
                 </span>
               </ClickAwayListener>
+
               {options && (
                 <div
                   style={{ position: "absolute", border: "1px solid grey" }}
