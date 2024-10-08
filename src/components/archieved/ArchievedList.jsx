@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./archievedList.css";
 import {
   doc,
@@ -12,20 +12,20 @@ import {
 import { db } from "../../firebase/firebase";
 import { ArrowBack, Search } from "@mui/icons-material";
 import ChatItem from "../chatItem/ChatItem";
-import { useSelector } from "react-redux";
-// import { ResetRightScreen } from "../../App";
+import { useDispatch, useSelector } from "react-redux";
+import { resetRightScreenChat } from "../../store/chatSlice";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function ArchievedList({ change }) {
-  //   const resetRightScreenChat = useContext(ResetRightScreen);
   const [selectedChat, setSelectedChat] = useState("0");
   const [searchName, setSearchName] = useState("");
   const [chats, setChats] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
   const [user, setUser] = useState({
-     dp: ""
+    dp: "",
   });
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.userAuth.currentUser);
 
   const changeSelectedChat = (chat) => {
@@ -56,7 +56,7 @@ function ArchievedList({ change }) {
   };
 
   useEffect(() => {
-    // resetRightScreenChat();
+    dispatch(resetRightScreenChat());
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser);
 
