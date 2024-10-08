@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./chatDetails.css";
 import Popup from "reactjs-popup";
 import { toast } from "react-toastify";
-// import Axios from "axios";
-// import UserItem from "../useritem/UserItem";
-// import { CLOUD_NAME, UPLOAD_PRESET } from "../../cloudinary";
 import { doc, onSnapshot, getDoc, setDoc } from "firebase/firestore"; // Modular imports
 import { CameraAlt, Close, Done } from "@mui/icons-material";
 import UserItem from "../useritem/UserItem";
@@ -192,7 +189,7 @@ function ChatDetails({
             onChange={(e) => setDescription(e.target.value)}
           />
           <div className="inp__tick" onClick={handleDescriptionChange}>
-            <DoneIcon />
+            <Done />
           </div>
         </div>
         {rightScreenChat[1] === "group" && (
