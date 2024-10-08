@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./chatList.css";
-// import { AuthContext, ResetRightScreen } from "../../App";
 import {
   doc,
   getDoc,
@@ -17,12 +16,23 @@ import { ClickAwayListener } from "@mui/material";
 import { auth, db, onAuthStateChanged, signOut } from "../../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/userAuthStore";
+import { resetRightScreenChat } from "../../store/chatSlice";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function ChatList({ change }) {
   const currentUser = useSelector((state) => state.userAuth.currentUser);
   const [theme, setTheme] = useState("dark");
+  const dispatch = useDispatch();
+  const [selectedChat, setSelectedChat] = useState("0");
+  const [searchName, setSearchName] = useState("");
+  const [chats, setChats] = useState([]);
+  const [filteredChats, setFilteredChats] = useState([]);
+  const [user0, setUser0] = useState({
+    dp: "",
+  });
+  const [menuOptions, setMenuOptions] = useState(false);
+  const [newChatOptions, setNewChatOptions] = useState(false);
 
   const updateTheme = async () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -36,28 +46,14 @@ function ChatList({ change }) {
     }
   };
 
-//   const updateAuth = useContext(AuthContext);
-//   const resetRightScreenChat = useContext(ResetRightScreen);
-  const dispatch = useDispatch();
-
-  const [selectedChat, setSelectedChat] = useState("0");
-  const [searchName, setSearchName] = useState("");
-  const [chats, setChats] = useState([]);
-  const [filteredChats, setFilteredChats] = useState([]);
-  const [user0, setUser0] = useState({
-    dp: "",
-  });
-  const [menuOptions, setMenuOptions] = useState(false);
-  const [newChatOptions, setNewChatOptions] = useState(false);
-
   const changeSelectedChat = (chat) => {
     setSelectedChat(chat);
   };
 
   const signout = () => {
-    // resetRightScreenChat();
     // signOut(auth).then(() => updateAuth(false));
     signOut(auth);
+    dispatch(resetRightScreenChat());
     dispatch(logOut);
   };
 
@@ -89,7 +85,7 @@ function ChatList({ change }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-    //   resetRightScreenChat();
+      dispatch(resetRightScreenChat());
 
       if (currentUser) {
         try {
