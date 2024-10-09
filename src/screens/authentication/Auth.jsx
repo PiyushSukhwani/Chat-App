@@ -8,6 +8,7 @@ import { setCurrentUser, setLoading } from "../../store/userAuthStore";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { PermIdentity } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
 
 const Auth = ({isLoading, updateLoader, updateAuth}) => {
   const [userCount, setUserCount] = useState([]);
@@ -92,11 +93,7 @@ const Auth = ({isLoading, updateLoader, updateAuth}) => {
       </h1>
 
       {isLoading ? (
-        <img
-          src="https://th.bing.com/th/id/R.8ea7fcd30fde5ae44b7ea39ffc42c29d?rik=RDDrq5UF%2f%2b74Tw&riu=http%3a%2f%2fwww.petpaw.com.au%2fwp-content%2fuploads%2f2014%2f06%2fAustralian-Silky-Terrier-1.jpg&ehk=LaJAMNE%2f%2bxy92kUSdC6md1RZ0C1e6N6jhyPnUTPgfM4%3d&risl=&pid=ImgRaw&r=0"
-          className="preloader"
-          alt=""
-        />
+        <CircularProgress />
       ) : (
         <div className="btn__container">
           <button className="join__btn" onClick={signIn}>
