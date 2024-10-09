@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./chatItem.css";
 import { ToastContainer, toast } from "react-toastify";
 import Popup from "reactjs-popup";
@@ -25,6 +25,7 @@ import isToday from "dayjs/plugin/isToday";
 import isYesterday from "dayjs/plugin/isYesterday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { updateMobileView } from "../../App";
 
 dayjs.extend(isToday);
 dayjs.extend(isYesterday);
@@ -58,6 +59,7 @@ function ChatItem({
   const [options, setOptions] = useState(false);
   const [display, setDisplay] = useState(true);
   const dispatch = useDispatch();
+  const updateMobileViewLeft = useContext(updateMobileView)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -160,31 +162,29 @@ function ChatItem({
 
   const getLastTextTime = (timestamp) => {
     let date;
-  
-    if (timestamp && typeof timestamp === 'object' && 'seconds' in timestamp) {
-      const milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000;
+
+    if (timestamp && typeof timestamp === "object" && "seconds" in timestamp) {
+      const milliseconds =
+        timestamp.seconds * 1000 + timestamp.nanoseconds / 1000000;
       date = dayjs(milliseconds);
-    }
-    else if (typeof timestamp === 'string') {
+    } else if (typeof timestamp === "string") {
       date = dayjs(timestamp);
-    }
-    else {
+    } else {
       console.error("Invalid timestamp format:", timestamp);
       return "Invalid Date";
     }
-  
+
     if (!date.isValid()) {
       console.error("Invalid date created from timestamp:", timestamp);
       return "Invalid Date";
     }
-  
+
     if (date.isToday()) return date.format("hh:mm a");
     if (date.isYesterday()) return "yesterday";
-    if (date.isSameOrAfter(dayjs().subtract(7, 'day'))) return date.format("dddd");
+    if (date.isSameOrAfter(dayjs().subtract(7, "day")))
+      return date.format("dddd");
     return date.format("DD/MM/YYYY");
   };
-  
-  
 
   const handleChatClick = (e) => {
     if (blocked) {
@@ -195,7 +195,7 @@ function ChatItem({
       return;
     }
     changeSelectedChat(chatid);
-    
+
     const targetUser =
       type === "personal"
         ? currentUser === members[0]
@@ -233,8 +233,10 @@ function ChatItem({
                       ? members[1]
                       : members[0]
                     : chatid;
-                dispatch(updateRightScreenChat([targetUser, type, chatid, e.target.id]));
-                // updateMobileView(false);
+                dispatch(
+                  updateRightScreenChat([targetUser, type, chatid, e.target.id])
+                );
+                updateMobileViewLeft(false);
               }
         }
         style={{

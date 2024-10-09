@@ -3,7 +3,7 @@ import "./chatHeader.css";
 import { ArrowBack } from "@mui/icons-material";
 import { db } from "../../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
-// import { UpdateMobileView } from '../../App';
+import { updateMobileView } from "../../App";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
@@ -16,8 +16,7 @@ function ChatHeader({ rightScreenChat, updateChatDetailsVisibility }) {
     name: "Loading...",
     description: "",
   });
-
-  //   const updateMobileView = useContext(UpdateMobileView);
+  const updateMobileViewLeft = useContext(updateMobileView)
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,7 +69,7 @@ function ChatHeader({ rightScreenChat, updateChatDetailsVisibility }) {
     >
       <div className="chat__user__details__wrapper">
         {screenWidth < 600 && (
-          <span onClick={() => updateMobileView(true)}>
+          <span onClick={() => updateMobileViewLeft(true)}>
             <ArrowBack className="arch__back__icon" />
           </span>
         )}

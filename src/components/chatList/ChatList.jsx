@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./chatList.css";
 import {
   doc,
@@ -13,10 +13,11 @@ import {
 import ChatItem from "../chatItem/ChatItem";
 import { Add, Brightness4, MoreHoriz, Search } from "@mui/icons-material";
 import { ClickAwayListener } from "@mui/material";
-import { auth, db, onAuthStateChanged, signOut } from "../../firebase/firebase";
+import { auth, db, signOut } from "../../firebase/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { logOut } from "../../store/userAuthStore";
 import { resetRightScreenChat } from "../../store/chatSlice";
+import { updateTheme } from "../../App";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
@@ -33,18 +34,19 @@ function ChatList({ change }) {
   });
   const [menuOptions, setMenuOptions] = useState(false);
   const [newChatOptions, setNewChatOptions] = useState(false);
+  const updateAppTheme = useContext(updateTheme)
 
-  const updateTheme = async () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    if (currentUser) {
-      await setDoc(
-        doc(db, "users", currentUser),
-        { theme: newTheme },
-        { merge: true }
-      );
-    }
-  };
+  // const updateTheme = async () => {
+  //   const newTheme = theme === "light" ? "dark" : "light";
+  //   setTheme(newTheme);
+  //   if (currentUser) {
+  //     await setDoc(
+  //       doc(db, "users", currentUser),
+  //       { theme: newTheme },
+  //       { merge: true }
+  //     );
+  //   }
+  // };
 
   const changeSelectedChat = (chat) => {
     setSelectedChat(chat);
@@ -137,7 +139,7 @@ function ChatList({ change }) {
             alt=""
           />
           <div className="chat__icons">
-            <span title="Theme" className="menu__span" onClick={updateTheme}>
+            <span title="Theme" className="menu__span" onClick={updateAppTheme}>
               <Brightness4 className="chat__icon" />
             </span>
             <ClickAwayListener onClickAway={() => setNewChatOptions(false)}>
