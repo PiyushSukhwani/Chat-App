@@ -36,10 +36,6 @@ function ChatDetails({
           draggable: false,
         });
 
-        const formData = new FormData();
-        formData.append("file", files[0]);
-        formData.append("upload_preset", UPLOAD_PRESET);
-
         try {
          const imgUrl = upload(files[0])
           setChatImage(imgUrl);
@@ -69,21 +65,39 @@ function ChatDetails({
   };
 
   useEffect(() => {
-    const chatDocRef = doc(db, "chats", rightScreenChat[0]);
+    const fetchChatDetails = async () => {
+      try {
+        if (rightScreenChat[1] === 'group') {
+          const unsubscribe = onSnapshot(doc(db, 'chats', rightScreenChat[0]), (snapshot) => {
+            if (snapshot.exists()) {
+              const data = snapshot.data();
+              setDefChatName(data.chatname);
+              setDefDesc(data.description);
+              setChatName(data.chatname);
+              setChatImage(data.dp);
+              setDescription(data.description);
+              setUserArray(data.members);
+            }
+          });
 
-    const unsubscribe = onSnapshot(chatDocRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        setDefChatName(data.chatname);
-        setDefDesc(data.description);
-        setChatName(data.chatname);
-        setChatImage(data.dp);
-        setDescription(data.description);
-        setUserArray(data.members);
+          return () => unsubscribe();
+        } else if (rightScreenChat[1] === 'personal') {
+          const snapshot = await getDoc(doc(db, 'users', rightScreenChat[0]));
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            setDefDesc(data.status);
+            setChatName(data.uname);
+            setDefChatName(data.uname);
+            setChatImage(data.dp);
+            setDescription(data.status);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching chat details:', error);
       }
-    });
+    };
 
-    return () => unsubscribe();
+    fetchChatDetails();
   }, [rightScreenChat]);
 
   const handleChatNameChange = async () => {
