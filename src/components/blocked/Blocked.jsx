@@ -11,20 +11,20 @@ import {
 } from "firebase/firestore";
 import ChatItem from "../chatItem/ChatItem";
 import { ArrowBack, Search } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { db } from "../../firebase/firebase";
-// import { ResetRightScreen } from '../../App';
+import { resetRightScreenChat } from "../../store/chatSlice";
 
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 function BlockedList({ change }) {
-  // const resetRightScreenChat = useContext(ResetRightScreen);
   const [selectedChat, setSelectedChat] = useState("0");
   const [searchName, setSearchName] = useState("");
   const [chats, setChats] = useState([]);
   const [filteredChats, setFilteredChats] = useState([]);
   const [user, setUser] = useState({ dp: "" });
   const currentUser = useSelector((state) => state.userAuth.currentUser);
+  const dispatch = useDispatch();
 
   const changeSelectedChat = (chat) => {
     setSelectedChat(chat);
@@ -54,7 +54,7 @@ function BlockedList({ change }) {
   };
 
   useEffect(() => {
-    // resetRightScreenChat();
+    dispatch(resetRightScreenChat());
 
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser);
