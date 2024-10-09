@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./chatInput.css";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { ToastContainer, toast } from "react-toastify";
-// import { uuid } from "react-uuid";
 import { v4 as uuid } from 'uuid';
 import "emoji-picker-element";
 import {

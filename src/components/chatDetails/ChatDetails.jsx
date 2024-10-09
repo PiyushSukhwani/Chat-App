@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./chatDetails.css";
 import Popup from "reactjs-popup";
 import { toast } from "react-toastify";
-import { doc, onSnapshot, getDoc, setDoc } from "firebase/firestore"; // Modular imports
+import { doc, onSnapshot, getDoc, setDoc } from "firebase/firestore";
 import { CameraAlt, Close, Done } from "@mui/icons-material";
 import UserItem from "../useritem/UserItem";
 import UserListItem from "../userListItem/UserListItem";
