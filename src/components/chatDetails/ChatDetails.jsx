@@ -8,9 +8,9 @@ import UserItem from "../useritem/UserItem";
 import UserListItem from "../userListItem/UserListItem";
 import { db } from "../../firebase/firebase";
 import upload from "../../firebase/upload";
+import { useSelector } from "react-redux";
 
 function ChatDetails({
-  rightScreenChat,
   updateChatDetailsVisibility,
   updateGroup,
 }) {
@@ -22,6 +22,7 @@ function ChatDetails({
   const [chatImage, setChatImage] = useState(
     "https://res.cloudinary.com/dpjkblzgf/image/upload/v1624507908/mess_zq9mov.png"
   );
+  const rightScreenChat = useSelector(state => state.chat.rightScreenChat)
 
   const uploadImage = async (files) => {
     if (files[0] && files[0].type.includes("image")) {
