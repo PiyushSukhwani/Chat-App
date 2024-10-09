@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import "./App.css";
-import { Provider, useDispatch } from "react-redux";
-import store from "./store/store";
+import { useDispatch } from "react-redux";
 import Auth from "./screens/authentication/Auth";
 import LeftScreen from "./screens/leftScreen/LeftScreen";
 import RightScreen from "./screens/rightScreen/RightScreen";
 import { setCurrentUser } from "./store/userAuthStore";
 import { auth, db, onAuthStateChanged } from "./firebase/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+
+export const updateMobileView = createContext();
+export const updateTheme = createContext();
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -22,7 +24,7 @@ const App = () => {
 
   const updateAuth = (status) => setIsLoggedIn(status);
 
-  const updateTheme = async () => {
+  const updateAppTheme = async () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     if (userUid) {
@@ -84,58 +86,66 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <>
-      <div
-        className="app"
-        style={theme === "light" ? cssPropertiesLight : cssPropertiesDark}
-      >
-        {isLoggedIn ? (
-          <div className="screen">
-            {mobileViewLeft ? (
-              <>
-                <div
-                  className={
-                    screenWidth < 600 ? "app__left app__full" : "app__left"
-                  }
-                >
-                  <LeftScreen />
-                </div>
-                <div
-                  className={
-                    screenWidth < 600 ? "app__right app__none" : "app__right"
-                  }
-                >
-                  <RightScreen />
-                </div>
-              </>
+    <updateTheme.Provider value={updateAppTheme}>
+      <updateMobileView.Provider value={setMobileViewLeft}>
+        <>
+          <div
+            className="app"
+            style={theme === "light" ? cssPropertiesLight : cssPropertiesDark}
+          >
+            {isLoggedIn ? (
+              <div className="screen">
+                {mobileViewLeft ? (
+                  <>
+                    <div
+                      className={
+                        screenWidth < 600 ? "app__left app__full" : "app__left"
+                      }
+                    >
+                      <LeftScreen />
+                    </div>
+                    <div
+                      className={
+                        screenWidth < 600
+                          ? "app__right app__none"
+                          : "app__right"
+                      }
+                    >
+                      <RightScreen />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      className={
+                        screenWidth < 600 ? "app__left app__none" : "app__left"
+                      }
+                    >
+                      <LeftScreen />
+                    </div>
+                    <div
+                      className={
+                        screenWidth < 600
+                          ? "app__right app__full"
+                          : "app__right"
+                      }
+                    >
+                      <RightScreen />
+                    </div>
+                  </>
+                )}
+              </div>
             ) : (
-              <>
-                <div
-                  className={
-                    screenWidth < 600 ? "app__left app__none" : "app__left"
-                  }
-                >
-                  <LeftScreen />
-                </div>
-                <div
-                  className={
-                    screenWidth < 600 ? "app__right app__full" : "app__right"
-                  }
-                >
-                  <RightScreen />
-                </div>
-              </>
+              <Auth
+                isLoading={isLoading}
+                updateLoader={updateLoader}
+                updateAuth={updateAuth}
+              />
             )}
           </div>
-        ) : (
-          <Auth
-            isLoading={isLoading}
-            updateLoader={updateLoader}
-            updateAuth={updateAuth}
-          />
-        )}
-      </div>
-    </>
+        </>
+      </updateMobileView.Provider>
+    </updateTheme.Provider>
   );
 };
 
