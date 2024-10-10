@@ -64,7 +64,8 @@ function ArchievedList({ change }) {
         try {
           const userDet = await getDoc(userDocRef);
           if (userDet.exists()) {
-            setUser(userDet.data());
+            const data = userDet.data();
+            setUser(data);
           }
         } catch (error) {
           console.error("Error fetching user data:", error);

@@ -119,17 +119,17 @@ function ChatItem({
   };
 
   const archieveItemHandler = async () => {
+    const userRef = doc(db, "users", uid);
     setDisplay(false);
 
-    const userRef = doc(db, "users", uid);
     try {
       if (archieved) {
         await updateDoc(userRef, {
-          archieved: arrayRemove(chatid),
+          archived: arrayRemove(chatid),
         });
       } else {
         await updateDoc(userRef, {
-          archieved: arrayUnion(chatid),
+          archived: arrayUnion(chatid),
         });
       }
     } catch (error) {
