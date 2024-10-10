@@ -76,7 +76,8 @@ const RightScreen = () => {
               <div className="center_content">
                 <img
                   className="img__right"
-                  src="https://res.cloudinary.com/dpjkblzgf/image/upload/v1624266352/user_1_f2gpxz.svg"
+                  src="no-chats3.png"
+                  // src="https://res.cloudinary.com/dpjkblzgf/image/upload/v1624266352/user_1_f2gpxz.svg"
                   alt=""
                 />
                 <h4 className="theme__font choose__chat">
