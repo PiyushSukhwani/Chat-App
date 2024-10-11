@@ -36,18 +36,6 @@ function ChatList({ change }) {
   const [newChatOptions, setNewChatOptions] = useState(false);
   const updateAppTheme = useContext(updateTheme)
 
-  // const updateTheme = async () => {
-  //   const newTheme = theme === "light" ? "dark" : "light";
-  //   setTheme(newTheme);
-  //   if (currentUser) {
-  //     await setDoc(
-  //       doc(db, "users", currentUser),
-  //       { theme: newTheme },
-  //       { merge: true }
-  //     );
-  //   }
-  // };
-
   const changeSelectedChat = (chat) => {
     setSelectedChat(chat);
   };
@@ -87,7 +75,7 @@ function ChatList({ change }) {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      dispatch(resetRightScreenChat());
+      // dispatch(resetRightScreenChat());
 
       if (currentUser) {
         try {

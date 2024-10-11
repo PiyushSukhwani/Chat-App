@@ -56,7 +56,7 @@ function ArchievedList({ change }) {
   };
 
   useEffect(() => {
-    dispatch(resetRightScreenChat());
+    // dispatch(resetRightScreenChat());
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser);
 

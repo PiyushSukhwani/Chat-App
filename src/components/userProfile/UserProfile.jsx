@@ -12,7 +12,7 @@ import upload from "../../firebase/upload";
 const umailExtractor = (umail) => umail.slice(0, umail.lastIndexOf("@"));
 
 const UserProfile = ({ change }) => {
-    const {currentUser, isLoading} = useSelector((state) => state.userAuth);
+  const {currentUser, isLoading} = useSelector((state) => state.userAuth);
   const [username, setUsername] = useState("");
   const [status, setStatus] = useState("");
   const [user, setUser] = useState({

@@ -59,7 +59,7 @@ function ChatItem({
   const [options, setOptions] = useState(false);
   const [display, setDisplay] = useState(true);
   const dispatch = useDispatch();
-  const updateMobileViewLeft = useContext(updateMobileView)
+  const updateMobileViewLeft = useContext(updateMobileView);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -147,13 +147,13 @@ function ChatItem({
           blocked: arrayRemove(chatid),
         });
       } else {
-        await updateDoc(userRef, {
-          blocked: arrayUnion(chatid),
-        });
-
         if (chatid === selectedChat) {
           dispatch(resetRightScreenChat());
         }
+
+        await updateDoc(userRef, {
+          blocked: arrayUnion(chatid),
+        });
       }
     } catch (error) {
       console.error("Error updating blocked items:", error);
@@ -191,6 +191,10 @@ function ChatItem({
       toast.error("Unblock chat to view messages", {
         position: "bottom-left",
         autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
       });
       return;
     }
@@ -202,7 +206,8 @@ function ChatItem({
           ? members[1]
           : members[0]
         : chatid;
-    dispatch(updateRightScreenChat([targetUser, type, chatid, e.target]));
+    dispatch(updateRightScreenChat([targetUser, type, chatid, e.target.id]));
+    updateMobileViewLeft(false);
   };
 
   const toggleOptions = () => setOptions((prev) => !prev);
@@ -213,32 +218,7 @@ function ChatItem({
       <div
         className="chat__item"
         id={chatid}
-        onClick={
-          blocked
-            ? () => {
-                toast.error("Unblock chat to view messages", {
-                  position: "bottom-left",
-                  autoClose: 2000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: false,
-                  draggable: false,
-                });
-              }
-            : (e) => {
-                changeSelectedChat(chatid);
-                const targetUser =
-                  type === "personal"
-                    ? uid === members[0]
-                      ? members[1]
-                      : members[0]
-                    : chatid;
-                dispatch(
-                  updateRightScreenChat([targetUser, type, chatid, e.target.id])
-                );
-                updateMobileViewLeft(false);
-              }
-        }
+        onClick={(e) => handleChatClick(e)}
         style={{
           position: "absolute",
           height: "100%",
@@ -317,7 +297,7 @@ function ChatItem({
               )}
 
               <ClickAwayListener onClickAway={() => setOptions(false)}>
-                <span onClick={() => setOptions(!options)}>
+                <span onClick={toggleOptions}>
                   <ExpandMore className="expand__icon" />
                 </span>
               </ClickAwayListener>
@@ -415,7 +395,7 @@ function ChatItem({
               )}
 
               <ClickAwayListener onClickAway={() => setOptions(false)}>
-                <span onClick={() => setOptions(!options)}>
+                <span onClick={toggleOptions}>
                   <ExpandMore className="expand__icon" />
                 </span>
               </ClickAwayListener>
