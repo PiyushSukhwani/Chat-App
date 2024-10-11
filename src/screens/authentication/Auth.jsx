@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { PermIdentity } from "@mui/icons-material";
 import { CircularProgress } from "@mui/material";
 
-const Auth = ({isLoading, updateLoader, updateAuth}) => {
+const Auth = ({ isLoading, updateLoader, updateAuth }) => {
   const [userCount, setUserCount] = useState([]);
   const dispatch = useDispatch();
 
@@ -24,7 +24,7 @@ const Auth = ({isLoading, updateLoader, updateAuth}) => {
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
-        updateAuth(true)
+        updateAuth(true);
         dispatch(setCurrentUser(user.uid));
       } else {
         // dispatch(setLoading(true));
@@ -42,7 +42,7 @@ const Auth = ({isLoading, updateLoader, updateAuth}) => {
             uname: user.displayName,
             umail: user.email,
             dp: user.photoURL,
-            status: "Hey there! I am using WhatsApp",
+            status: "Hey there! I am using WeChat",
             friends: [],
             archived: [0],
             blocked: [0],
@@ -50,7 +50,7 @@ const Auth = ({isLoading, updateLoader, updateAuth}) => {
           },
           { merge: true }
         );
-        updateAuth(true)
+        updateAuth(true);
         updateLoader(false);
         // dispatch(setCurrentUser(user.uid));
       }
@@ -65,10 +65,16 @@ const Auth = ({isLoading, updateLoader, updateAuth}) => {
   useEffect(() => {
     const fetchUserCount = async () => {
       const userCollection = collection(db, "users");
-      const snapShot = await getDocs(userCollection);
-      setUserCount(
-        snapShot.docs.map((doc) => ({ id: doc.id, data: doc.data() }))
-      );
+      try {
+        const snapShot = await getDocs(userCollection);
+        const data = snapShot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }));
+        setUserCount(data);
+      } catch (error) {
+        console.error("Error fetching users.");
+      }
     };
     fetchUserCount();
   }, []);

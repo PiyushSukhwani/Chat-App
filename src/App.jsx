@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import "./App.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Auth from "./screens/authentication/Auth";
 import LeftScreen from "./screens/leftScreen/LeftScreen";
 import RightScreen from "./screens/rightScreen/RightScreen";
@@ -19,6 +19,7 @@ const App = () => {
   const [userUid, setUserUid] = useState("");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.userAuth.currentUser)
 
   const updateLoader = (option) => setIsLoading(option);
 
@@ -93,7 +94,7 @@ const App = () => {
             className="app"
             style={theme === "light" ? cssPropertiesLight : cssPropertiesDark}
           >
-            {isLoggedIn ? (
+            {currentUser ? (
               <div className="screen">
                 {mobileViewLeft ? (
                   <>
