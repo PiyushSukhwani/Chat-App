@@ -81,13 +81,14 @@ function ChatInput({ rightScreenChat, user, updateScrollTimeout }) {
       );
     }
   };
+  
   const resetInputFields = () => {
     setTextInput("");
     setInputHeight("25px");
     resetImage();
   };
 
-  const uploadImage = (files) => {
+  const uploadImage = async (files) => {
     if (files[0] && files[0].type.includes("image")) {
       if (files[0].size < 4100000) {
         toast.dark("Attaching image", {
@@ -95,7 +96,7 @@ function ChatInput({ rightScreenChat, user, updateScrollTimeout }) {
           autoClose: 4300,
         });
 
-        const imgUrl = upload(files[0])
+        const imgUrl = await upload(files[0])
         setImageInput(imgUrl)
       } else {
         toast.error("Keep image size below 4Mb", {
@@ -191,7 +192,7 @@ function ChatInput({ rightScreenChat, user, updateScrollTimeout }) {
           listening
             ? () => SpeechRecognition.stopListening()
             : () => {
-                resetTranscript();
+                // resetTranscript();
                 SpeechRecognition.startListening({ continuous: true });
                 setEmojiOptions(false);
               }
